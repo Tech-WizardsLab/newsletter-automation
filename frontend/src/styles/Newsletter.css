@@ -1,0 +1,32 @@
+.newsletter-container {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    background: #f4f4f4;
+    border-radius: 8px;
+  }
+  
+  .newsletter-preview {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    max-width: 900px; /* Increased width */
+    margin: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  .generate-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
