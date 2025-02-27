@@ -26,3 +26,23 @@ def approve_news(id):
     conn.commit()
     conn.close()
     return jsonify({"message": "News approved successfully!", "id": id})
+
+@news_routes.route("/news/<int:id>", methods=["DELETE"])
+def delete_news(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM news WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "News deleted successfully!"}), 200
+
+@news_routes.route("/news/<int:id>", methods=["PUT"])
+def edit_news(id):
+    data = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE news SET title = ?, category = ? WHERE id = ?", (data["title"], data["category"], id))
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "News updated successfully!"}), 200

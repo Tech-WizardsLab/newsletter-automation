@@ -6,20 +6,22 @@ import "./styles/News.css";
 
 const News = () => {
   const [news, setNews] = useState([]);
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
 
   useEffect(() => {
     fetchNews();
   }, []);
 
-  // Fetch news from Flask backend
   const fetchNews = () => {
     axios.get("https://fuzzy-guide-r4p9r44vwq54c5gxj-5000.app.github.dev/news")
       .then((response) => {
         setNews(response.data.news);
       })
-      .catch((error) => {
-        console.error("Error fetching news:", error);
-      });
+      .catch((error) => console.error("Error fetching news:", error));
+  };
+
+  const updateTrigger = () => {
+    setTriggerUpdate((prev) => !prev); // Toggle triggerUpdate to re-fetch newsletter
   };
 
   const approveNews = (id) => {
@@ -30,11 +32,11 @@ const News = () => {
             article.id === id ? { ...article, approved: 1 } : article
           )
         );
+        updateTrigger(); // Refresh newsletter
       })
       .catch((error) => console.error("Error approving news:", error));
   };
 
-  // Edit news
   const editNews = (id, currentTitle, currentCategory) => {
     const newTitle = prompt("Edit title:", currentTitle);
     const newCategory = prompt("Edit category:", currentCategory);
@@ -43,16 +45,21 @@ const News = () => {
         title: newTitle,
         category: newCategory
       })
-      .then(() => fetchNews())
+      .then(() => {
+        fetchNews();
+        updateTrigger(); // Refresh newsletter
+      })
       .catch((error) => console.error("Error editing news:", error));
     }
   };
 
-  // Delete news
   const deleteNews = (id) => {
     if (window.confirm("Are you sure you want to delete this news item?")) {
       axios.delete(`https://fuzzy-guide-r4p9r44vwq54c5gxj-5000.app.github.dev/news/${id}`)
-        .then(() => fetchNews())
+        .then(() => {
+          fetchNews();
+          updateTrigger(); // Refresh newsletter
+        })
         .catch((error) => console.error("Error deleting news:", error));
     }
   };
@@ -75,8 +82,8 @@ const News = () => {
           <p>No news available.</p>
         )}
       </ul>
-      
-      <GenerateNewsletter />
+
+      <GenerateNewsletter triggerUpdate={triggerUpdate} />
     </div>
   );
 };
